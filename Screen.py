@@ -3,8 +3,7 @@ from string import ascii_uppercase
 from pprint import pprint
 
 class screen:
-    source = []                   
-    base = []
+    source = []
     hat = []
     head = []
     body = []
@@ -34,6 +33,7 @@ class screen:
         fileString = "screens/" + filename + ".txt"
         with open(fileString, "r") as f:
             self.source = f.readlines()
+            #self.source = list(f.readlines())
         
     def display(self):
         for line in self.source:
@@ -43,7 +43,26 @@ class screen:
             
     def addLetter(self, letter):
         letter = letter.upper()
-        self.letterDict[letter][0]
+        # what is this? \/
+        #self.letterDict[letter][0]
         tempList = list(self.source[self.letterDict[letter][0]])
         tempList[self.letterDict[letter][1]] = letter
         self.source[self.letterDict[letter][0]] = ''.join(tempList)
+    
+    def addPart(self, number):
+        if number == 1:
+            # addhat
+            print("1")
+        elif number == 2:
+            # addhead
+            print("2")
+        else:
+            print("Whoops!")
+    
+    def addHead():
+        # gotta grab multiple lines :(
+        # probably use string splicing here
+        tempList = list(self.source[self.letterDict[letter][0]])
+        tempList[self.letterDict[letter][1]] = letter
+        self.source[self.letterDict[letter][0]] = ''.join(tempList)
+        
