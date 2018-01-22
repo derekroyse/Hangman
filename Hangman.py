@@ -13,6 +13,11 @@ loopSentinel = True
 lettersGuessed = []
 timesWrong = 0
 
+# create screens
+titleScreen = screen("title")
+loseScreen = screen("lose")
+winScreen = screen("win")
+
 # difficulty parameters
 #difficulty: 1=easy,2=normal,3=hard
 difficulty = 2
@@ -46,6 +51,7 @@ def testDisplay():
     
 # Game progress display
 def showInfo():
+    print("Current Word: " + createRevealed(currentWord, lettersGuessed))
     print("Letters Revealed: " + createRevealed(currentWord, lettersGuessed))
     print("Guesses Remaining: " + str(maxWrong-timesWrong))
     
@@ -65,41 +71,35 @@ def clearScreen():
         os.system('clear')
     
 # main loop
-# TODO: show title screen
-#clearScreen()
-#titleScreen = screen("title")
-#titleScreen.display()
-
-# create gameScreen
-gameScreen = screen("blank")
+clearScreen()
+titleScreen.display()
 
 # mainLoop is the entire running process
-while mainLoop == True:
+while mainLoop == True:    
     # game setup
-    playerInput = raw_input("Enter any key and press 'Enter' to play or 'q' to quit: ") 
+    playerInput = raw_input("Press 'Enter' to continue or enter 'q' to quit: ") 
     if playerInput == 'q' or playerInput == 'Q':
         print("Thanks for playing!")
         mainLoop = False
     else:
         # New Game
         loopSentinel = True
+        gameScreen = screen("gallows")
         # ask for difficulty(s) 
-        playerInput = 0
-        while (playerInput != '1' and playerInput != '2' and playerInput != '3'):
-            print("Choose a difficulty:")
-            print("1) Easy")
-            print("2) Normal") 
-            print("3) Hard")
-            playerInput = raw_input("Select a difficulty: ") 
-        setDifficulty(playerInput)            
+        #playerInput = 0
+        #while (playerInput != '1' and playerInput != '2' and playerInput != '3'):
+        #    print("Choose a difficulty:")
+        #    print("1) Easy")
+        #    print("2) Normal") 
+        #    print("3) Hard")
+        #   playerInput = raw_input("Select a difficulty: ") 
+        #setDifficulty(playerInput)            
         # pick currentWord at random from list based on difficulty
-        # TODO: change word choice based on difficulty
         currentWord = random.choice(words)        
     # primary game loop
         while loopSentinel == True: 
             clearScreen()
-            gameScreen.display()
-            print("Current Word: " + createRevealed(currentWord, lettersGuessed))
+            gameScreen.display()            
             showInfo()
             print("1) guess letter")
             print("2) guess word") 
@@ -115,23 +115,29 @@ while mainLoop == True:
                 if playerInput in lettersGuessed:
                     print("You already guessed that letter! Try again!")
                 elif playerInput not in currentWord:
-                    print("Wrong, that letter isn't in the word!")
+                    clearScreen()
                     lettersGuessed.append(playerInput)                    
                     gameScreen.addLetter(playerInput)
-                    timesWrong += 1                    
-                    # TODO: Add next part to screen
-                    # gameScreen.addNextPart                    
+                    timesWrong += 1                     
+                    gameScreen.addNextPart(timesWrong)                     
+                    gameScreen.display()
+                    print("Wrong, that letter isn't in the word!")
+                    raw_input("Press 'Enter' to continue... ")
                 elif playerInput in currentWord:            
-                    print("Correct! You got one!")
+                    clearScreen()
                     lettersGuessed.append(playerInput)
                     gameScreen.addLetter(playerInput)
+                    gameScreen.display()
+                    
+                    print("Correct! You got one!")
+                    raw_input("Press 'Enter' to continue... ")
                 else:
                     print("Error! You shouldn't be seeing this...")
                 # check if timesWrong is greater than limit
                 if (timesWrong > maxWrong):
                     # lose
                     clearScreen()
-                    # loseScreen.display()                    
+                    loseScreen.display()                    
                     print("Dangnabbit we lost another one! Better luck next time!") 
                     raw_input("Press 'Enter' to continue... ")
                     loopSentinel = False
@@ -139,7 +145,7 @@ while mainLoop == True:
                 if createRevealed(currentWord, lettersGuessed) == currentWord:
                     # You win!
                     clearScreen()
-                    # winScreen.display()
+                    winScreen.display()
                     raw_input("YEEHAWW! You won! Press 'Enter' to continue... ")
                     loopSentinel = False
                     break    
@@ -150,7 +156,7 @@ while mainLoop == True:
                 # correct guess
                 if playerInput == currentWord:
                     clearScreen()
-                    # winScreen.display() 
+                    winScreen.display() 
                     raw_input("YEEHAWW! You won! Press 'Enter' to continue... ")
                     loopSentinel = False
                     break                    
