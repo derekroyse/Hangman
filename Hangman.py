@@ -1,7 +1,20 @@
-# setup
 from Screen import screen
 import random
 import os
+
+# Create a dictionary to hold the positions of the letters 
+# on the display board.
+letterDict = dict()    
+currentLetter = 'A'    
+while currentLetter <= 'Z':
+    for i in range(17, 66, 4):
+        if currentLetter < 'N':
+            letterDict[currentLetter] = 2,i
+            currentLetter = chr(ord(currentLetter) + 1)
+        else:
+            letterDict[currentLetter] = 3,i
+            currentLetter = chr(ord(currentLetter) + 1)   
+# reference like thus: letterDict['A'][0] and letterDict['A'][1]
 
 # get list of words from file
 with open("ListOfWords.txt") as file:
@@ -12,6 +25,7 @@ mainLoop = True
 loopSentinel = True
 lettersGuessed = []
 timesWrong = 0
+victim = open("screens/victim.txt").readlines()
 
 # create screens
 titleScreen = screen("title")
@@ -21,7 +35,7 @@ winScreen = screen("win")
 # difficulty parameters
 #difficulty: 1=easy,2=normal,3=hard
 difficulty = 2
-maxWrong = 6
+maxWrong = 5
 
 # set up difficulty parameters
 def setDifficulty(difficultyOption):
@@ -117,16 +131,16 @@ while mainLoop == True:
                 elif playerInput not in currentWord:
                     clearScreen()
                     lettersGuessed.append(playerInput)                    
-                    gameScreen.addLetter(playerInput)
+                    gameScreen.addLetter(playerInput, letterDict)
                     timesWrong += 1                     
-                    gameScreen.addNextPart(timesWrong)                     
+                    gameScreen.addNextPart(timesWrong, victim)                     
                     gameScreen.display()
                     print("Wrong, that letter isn't in the word!")
                     raw_input("Press 'Enter' to continue... ")
                 elif playerInput in currentWord:            
                     clearScreen()
                     lettersGuessed.append(playerInput)
-                    gameScreen.addLetter(playerInput)
+                    gameScreen.addLetter(playerInput, letterDict)
                     gameScreen.display()
                     
                     print("Correct! You got one!")
