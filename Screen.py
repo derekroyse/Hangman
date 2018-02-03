@@ -8,15 +8,13 @@ class screen:
     # Source is a list that contains the data that is
     # printed to the screen.
     source = []
-              
+    
+    # Create a new Screen object by copying a text file's
+    # contents to the source list.
     def __init__(self, filename):
         fileString = "screens/" + filename + ".txt"
         with open(fileString, "r") as f:
-            ## for line in f
-                ## make an iterator
-                ## self.source[iterator] = list(f)
             self.source = f.readlines()
-            #self.source = list(f.readlines())
     
     # Print out a screen.
     def display(self):
